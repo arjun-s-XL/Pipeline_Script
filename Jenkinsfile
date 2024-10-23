@@ -1,37 +1,47 @@
 pipeline {
-    agent none
+    agent any
     stages {
-	
-	stage('Non-Parallel Stage') {
-	    agent {
-                        label "master"
-                }
-        steps {
-                echo 'This stage will be executed first'
-                }
+        stage('Git-Checkout') {
+            steps {
+                echo "Checking out from Git Repo"
+                git 'https://github.com/arjun-s-XL/Pipeline_Script.git'
+            }
         }
-
-	
-        stage('Run Tests') {
-            parallel {
-                stage('Test On Windows') {
-                    agent {
-                        label "Windows_Node"
-                    }
-                    steps {
-                        echo "Task1 on Agent"
-                    }
-                    
-                }
-                stage('Test On Master') {
-                    agent {
-                        label "master"
-                    }
-                    steps {
-						echo "Task1 on Master"
-					}
-                }
+        stage('Build') {
+            steps {
+                echo "Building the checked-out project!"
+                sh './Build.sh'  
+            }
+        }
+        stage("Unit-Test") {
+            steps {
+                echo "Unit testing the checked-out project!"
+                sh './Unit.sh'  
+            }
+        }
+        stage("Quality") {
+            steps {
+                echo "Quality Assurance of checked-out project!"
+                sh './Quality.sh'  
+            }
+        }
+        stage("Deploy") {
+            steps {
+                echo "Deploying the checked-out project!"
+                sh './Deploy.sh'  
             }
         }
     }
+    post {
+        always {
+            echo 'This will always run, regardless of the pipeline result.'
+        }
+        success {
+            echo 'Pipeline succeeded! Notify the team or trigger other jobs.'
+        }
+        failure {
+            echo 'Pipeline failed! Alert the team or initiate rollback steps.'
+        }
+    }
 }
+
