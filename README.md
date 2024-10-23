@@ -1,4 +1,3 @@
-```markdown
 # Jenkins Pipeline
 
 This Jenkins pipeline automates the process of checking out code from a Git repository, building the project, running unit tests, ensuring quality, and deploying the project. It also includes post-build steps to notify the team of the success or failure of the pipeline.
@@ -30,4 +29,4 @@ This Jenkins pipeline automates the process of checking out code from a Git repo
 
 - Ensure that the scripts (`Build.sh`, `Unit.sh`, `Quality.sh`, `Deploy.sh`) are executable before running the pipeline.
 - If the scripts do not have execution permissions, you may need to run `chmod +x` on them to allow execution.
-```
+
